@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Placement Intelligence Portal</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--bg: #f6f4ef;
+			--paper: #fdfcf8;
+			--ink: #1d1f22;
+			--muted: #6d727b;
+			--accent: #0f766e;
+			--accent-soft: #d8efeb;
+			--danger: #c2410c;
+			--shadow: 0 12px 40px rgba(24, 36, 38, 0.12);
+			--radius: 18px;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			min-height: 100vh;
+			font-family: "Manrope", sans-serif;
+			color: var(--ink);
+			background:
+				radial-gradient(circle at 15% 15%, #f4dccf 0%, transparent 32%),
+				radial-gradient(circle at 88% 88%, #d4ebe5 0%, transparent 35%),
+				linear-gradient(135deg, #f5f2ea 0%, #ecefef 100%);
+			padding: 2rem 1rem;
+		}
+
+		.shell {
+			max-width: 1060px;
+			margin: 0 auto;
+			display: grid;
+			grid-template-columns: 1.05fr 1fr;
+			gap: 1.25rem;
+			align-items: stretch;
+		}
+
+		.panel {
+			background: var(--paper);
+			border: 1px solid rgba(31, 35, 40, 0.06);
+			border-radius: var(--radius);
+			box-shadow: var(--shadow);
+			padding: 1.5rem;
+		}
+
+		.brand {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			font-family: "Space Grotesk", sans-serif;
+			font-weight: 700;
+			letter-spacing: 0.02em;
+			margin-bottom: 1rem;
+		}
+
+		.brand-mark {
+			width: 30px;
+			height: 30px;
+			border-radius: 9px;
+			background: linear-gradient(155deg, #0f766e, #14b8a6);
+			display: inline-block;
+		}
+
+		h1 {
+			margin: 0;
+			font-family: "Space Grotesk", sans-serif;
+			font-size: clamp(1.7rem, 3.4vw, 2.35rem);
+			line-height: 1.15;
+			max-width: 18ch;
+		}
+
+		.lead {
+			color: var(--muted);
+			line-height: 1.65;
+			margin: 1rem 0 0;
+		}
+
+		.meta {
+			margin-top: 1.25rem;
+			display: grid;
+			gap: 0.8rem;
+		}
+
+		.meta-card {
+			border: 1px dashed rgba(15, 118, 110, 0.25);
+			border-radius: 12px;
+			padding: 0.75rem 0.9rem;
+			background: linear-gradient(145deg, rgba(216, 239, 235, 0.5), rgba(216, 239, 235, 0.12));
+		}
+
+		.meta-title {
+			margin: 0;
+			font-size: 0.8rem;
+			color: var(--muted);
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+		}
+
+		.meta-value {
+			margin: 0.25rem 0 0;
+			font-weight: 700;
+		}
+
+		.form-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 0.9rem;
+		}
+
+		.field {
+			display: flex;
+			flex-direction: column;
+			gap: 0.35rem;
+		}
+
+		.field.full {
+			grid-column: 1 / -1;
+		}
+
+		label {
+			font-size: 0.88rem;
+			color: #39414a;
+			font-weight: 600;
+		}
+
+		input,
+		select {
+			width: 100%;
+			border: 1px solid #d9d9d4;
+			border-radius: 11px;
+			padding: 0.72rem 0.78rem;
+			font-size: 0.94rem;
+			font-family: inherit;
+			background: #ffffff;
+			transition: border-color 0.18s ease, box-shadow 0.18s ease;
+		}
+
+		input:focus,
+		select:focus {
+			outline: none;
+			border-color: #0d9488;
+			box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.15);
+		}
+
+		.btn {
+			margin-top: 0.3rem;
+			width: 100%;
+			border: none;
+			border-radius: 12px;
+			padding: 0.82rem 1rem;
+			background: linear-gradient(110deg, #0f766e, #0d9488);
+			color: #ffffff;
+			font-weight: 700;
+			font-size: 0.95rem;
+			letter-spacing: 0.02em;
+			cursor: pointer;
+			transition: transform 0.16s ease, filter 0.16s ease;
+		}
+
+		.btn:hover {
+			filter: brightness(1.06);
+			transform: translateY(-1px);
+		}
+
+		.result,
+		.error {
+			margin-top: 1rem;
+			border-radius: 12px;
+			padding: 0.85rem 0.95rem;
+			font-size: 0.92rem;
+		}
+
+		.result {
+			background: var(--accent-soft);
+			border: 1px solid rgba(15, 118, 110, 0.25);
+		}
+
+		.error {
+			color: var(--danger);
+			background: #fff1eb;
+			border: 1px solid rgba(194, 65, 12, 0.25);
+		}
+
+		.result h3 {
+			margin: 0 0 0.25rem;
+			font-family: "Space Grotesk", sans-serif;
+			font-size: 1.1rem;
+		}
+
+		.tips {
+			margin: 0.65rem 0 0;
+			padding-left: 1rem;
+			color: #1f2937;
+		}
+
+		.tips li {
+			margin-bottom: 0.35rem;
+		}
+
+		.hint {
+			margin-top: 0.55rem;
+			color: var(--muted);
+			font-size: 0.8rem;
+		}
+
+		.toggle-row {
+			display: flex;
+			align-items: center;
+			gap: 0.55rem;
+			margin-top: 0.3rem;
+		}
+
+		.toggle-row label {
+			font-size: 0.86rem;
+			font-weight: 600;
+			color: #334155;
+		}
+
+		.toggle-row input[type="checkbox"] {
+			width: 16px;
+			height: 16px;
+			margin: 0;
+		}
+
+		@media (max-width: 900px) {
+			.shell {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		@media (max-width: 640px) {
+			.form-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+</head>
+<body>
+	<main class="shell">
+		<section class="panel">
+			<div class="brand">
+				<span class="brand-mark"></span>
+				<span>Placement Intelligence Portal</span>
+			</div>
+			<h1>Predict placement outcomes with your trained ML model.</h1>
+			<p class="lead">
+				This interface is powered by your notebook-trained XGBoost model from <strong>model.json</strong>.
+				Enter candidate profile details and encoded placement signals to estimate placement probability.
+			</p>
+
+			<div class="meta">
+				<article class="meta-card">
+					<p class="meta-title">Model Inputs</p>
+					<p class="meta-value">Age, GPA, Experience, Stream, Salary Signal, College Reputation</p>
+				</article>
+				<article class="meta-card">
+					<p class="meta-title">Prediction Type</p>
+					<p class="meta-value">Binary Classification: Placed vs Not Placed</p>
+				</article>
+			</div>
+		</section>
+
+		<section class="panel">
+			<form method="post" novalidate>
+				<div class="form-grid">
+					<div class="field">
+						<label for="age">Age</label>
+						<input id="age" name="age" type="number" min="16" max="60" step="1" required>
+					</div>
+
+					<div class="field">
+						<label for="gpa">GPA (out of 10)</label>
+						<input id="gpa" name="gpa" type="number" min="0" max="10" step="0.01" required>
+					</div>
+
+					<div class="field">
+						<label for="years_of_experience">Years of Experience</label>
+						<input id="years_of_experience" name="years_of_experience" type="number" min="0" max="20" step="0.1" required>
+					</div>
+
+					<div class="field">
+						<label for="expected_salary">Expected Salary</label>
+						<input id="expected_salary" name="expected_salary" type="number" min="0" step="100" required>
+					</div>
+
+					<div class="field full">
+						<label for="stream">Stream</label>
+						<select id="stream" name="stream" required>
+							<option value="" selected disabled>Select stream</option>
+							{% for stream in stream_options %}
+								<option value="{{ stream }}">{{ stream }}</option>
+							{% endfor %}
+						</select>
+					</div>
+
+					<div class="field full">
+						<label for="college_name">College Name</label>
+						<input id="college_name" name="college_name" list="college-list" placeholder="Start typing a college name" required>
+						<datalist id="college-list">
+							{% for college in college_options %}
+								<option value="{{ college }}"></option>
+							{% endfor %}
+						</datalist>
+						<div class="toggle-row">
+							<input id="use_custom_college_rank" name="use_custom_college_rank" type="checkbox">
+							<label for="use_custom_college_rank">My college is not listed, use my custom placement rank</label>
+						</div>
+						<p class="hint">If checked, enter a rank from 0 to 100 based on your estimate.</p>
+					</div>
+
+					<div class="field full">
+						<label for="custom_college_rank">Custom College Placement Rank (0-100)</label>
+						<input id="custom_college_rank" name="custom_college_rank" type="number" min="0" max="100" step="0.1" placeholder="Example: 72.5" disabled>
+						<p class="hint">0 means very weak placement record, 100 means excellent placement record.</p>
+					</div>
+				</div>
+
+				<button class="btn" type="submit">Generate Prediction</button>
+			</form>
+
+			{% if prediction %}
+				<div class="result">
+					<h3>Result: {{ prediction }}</h3>
+					<div>Placement Probability: <strong>{{ probability }}%</strong></div>
+					<div>Decision Threshold: <strong>{{ threshold }}%</strong></div>
+					{% if probability < threshold and improvement_tips %}
+						<p class="hint">Your score is below the threshold. Focus on these basic improvement steps:</p>
+						<ul class="tips">
+							{% for tip in improvement_tips %}
+								<li>{{ tip }}</li>
+							{% endfor %}
+						</ul>
+					{% endif %}
+				</div>
+			{% endif %}
+
+			{% if error %}
+				<div class="error">{{ error }}</div>
+			{% endif %}
+		</section>
+	</main>
+	<script>
+		const customRankToggle = document.getElementById("use_custom_college_rank");
+		const customRankInput = document.getElementById("custom_college_rank");
+		const collegeNameInput = document.getElementById("college_name");
+
+		function syncCollegeMode() {
+			const useCustom = customRankToggle.checked;
+			customRankInput.disabled = !useCustom;
+			customRankInput.required = useCustom;
+			collegeNameInput.required = !useCustom;
+			if (useCustom) {
+				collegeNameInput.value = "";
+			} else {
+				customRankInput.value = "";
+			}
+		}
+
+		customRankToggle.addEventListener("change", syncCollegeMode);
+		syncCollegeMode();
+	</script>
+</body>
+</html>
